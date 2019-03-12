@@ -32,6 +32,9 @@ export default new Vuex.Store({
     addComment(state, data) {
       state.comments.push(data)
     },
+    deleteComment(state, data) {
+      state.comments.push(data)
+    }
   },
     actions: {
       initialize({ commit }) {
@@ -67,6 +70,14 @@ export default new Vuex.Store({
           .then(res => {
             console.log(res)
             commit('addComment', res.data.results)
+          })
+
+      },
+      deleteComment({ commit, dispatch }, payload) {
+        _sandbox.delete('bugs/' +payload.bug + '/notes' +payload.note, payload)
+          .then(res => {
+            console.log(res)
+            commit('deleteComment', res.data.results)
           })
 
       },

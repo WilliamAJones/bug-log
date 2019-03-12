@@ -2,12 +2,15 @@
    <div class="notes row">
       <div v-for="comment in comments" class="col-10 offset-2 plain-card">
             <div class="row">
-               <div class="col-8 ">
+               <div class="col-6">
                   <h2>{{comment.content}}</h2>
                </div>
                <div class="col-4">
                   <p><i>Requested on Behalf of : {{comment.creator}}</i></p>
                   <p><i>Requested by : {{comment.user}}</i></p>
+               </div>
+               <div class="col-2">
+                  <button class="" @click="deleteComment(comment._id)">Remove</button>
                </div>
             </div>
       </div>
@@ -33,7 +36,11 @@
          return this.$store.state.comments
         }
       },
-      methods: {},
+      methods: {
+         deleteBoard(boardId) {
+        this.$store.dispatch("deleteComment", commentId);
+         }
+      },
       components: {}
    }
 </script>
