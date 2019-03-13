@@ -10,7 +10,7 @@
                   <p><i>Requested by : {{comment.user}}</i></p>
                </div>
                <div class="col-2">
-                  <button class="" v-if="!ticketClosed" @click="deleteComment(comment._id)">Remove</button>
+                  <button class="btn btn-danger" v-if="!ticketClosed" @click="deleteComment(comment._id)">Remove</button>
                </div>
             </div>
       </div>
