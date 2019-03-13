@@ -3,7 +3,10 @@
     <div class="row">
       <div id="nav" class="col-12">
         <router-link to="/home">||<i class="fas fa-home"></i>Home||</router-link> 
-         <p @click="seen = !seen">||<i class="fas fa-bug fa-spin"></i>Create Ticket||</p>
+         <p><span class="scuffed" @click="seen = !seen">||<i class="fas fa-bug fa-spin"></i>Create Ticket||</span></p>
+         <button class="btn btn-primary" @click="showingOpen = !showingOpen">
+           {{ showingOpen ? 'Show All Tickets' : 'Show Open Tickets' }}
+         </button>
       </div>
       <div class="col-12">
         <form class="row" @submit.prevent='CreateTicket' v-if="seen">
@@ -21,7 +24,7 @@
 
       </div>
       <div class="col-12">
-        <MyTickets></MyTickets>
+        <MyTickets :showingOpen="showingOpen"></MyTickets>
       </div>
     </div>
   </div>
@@ -40,8 +43,9 @@
     },
     data() {
       return {
+        showingOpen: false,
         seen: false,
-        newTicket: {}
+        newTicket: {},
       }
     },
     components: {
@@ -82,5 +86,8 @@
   .home {
     background-color: black;
 
+  }
+  .scuffed{
+    cursor:crosshair;
   }
 </style>

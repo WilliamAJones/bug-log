@@ -34,7 +34,12 @@ export default new Vuex.Store({
     },
     deleteComment(state, data) {
       state.comments.push(data)
+    },
+    closeTicket(state, data){
+      let ticket = state.tickets.find(t => t._id == data._id)
+      ticket.closed = data.closed
     }
+
   },
     actions: {
       initialize({ commit }) {
@@ -52,9 +57,16 @@ export default new Vuex.Store({
         })
       
       },
-
       setActiveTicket({ commit }, payload) {
         commit('setActiveTicket', payload)
+      },
+      closeTicket({commit}, payload){
+        _sandbox.delete('bugs/'+payload)
+        .then(res=>{
+          console.log(res)
+          commit('closeTicket', res.data.results)
+        })
+        // commit('closeTicket',payload)
       },
       createTicket({ commit, dispatch }, payload) {
         _sandbox.post('bugs', payload)
@@ -74,10 +86,10 @@ export default new Vuex.Store({
 
       },
       deleteComment({ commit, dispatch }, payload) {
-        _sandbox.delete('bugs/' +payload.bug + '/notes' +payload.note, payload)
+        _sandbox.delete('bugs/' +payload.bug + '/notes/' +payload.note, payload)
           .then(res => {
             console.log(res)
-            commit('deleteComment', res.data.results)
+           dispatch('getNotes', payload.bug)
           })
 
       },

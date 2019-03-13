@@ -10,7 +10,7 @@
                   <p><i>Requested by : {{comment.user}}</i></p>
                </div>
                <div class="col-2">
-                  <button class="" @click="deleteComment(comment._id)">Remove</button>
+                  <button class="" v-if="!ticketClosed" @click="deleteComment(comment._id)">Remove</button>
                </div>
             </div>
       </div>
@@ -21,13 +21,12 @@
 <script>
    export default {
       name: "notes",
-      props: [],
+      props: ['ticketClosed'],
       data() {
          return {}
       },
       mounted(){
          // if (this.$store.state.comments.length == 0) 
- 
             this.$store.dispatch('getNotes', this.$route.params.id)
          
       },
@@ -37,8 +36,8 @@
         }
       },
       methods: {
-         deleteBoard(boardId) {
-        this.$store.dispatch("deleteComment", commentId);
+         deleteComment(commentId) {
+        this.$store.dispatch("deleteComment", {note:commentId,bug:this.$route.params.id});
          }
       },
       components: {}

@@ -9,7 +9,7 @@
          <div class="col-10">
             <div v-if="ticket.creator" class="row">
                <div class="col-10 offset-2 activeticket">
-                  <h1>{{ticket.title}}</h1>
+                  <h1>{{ticket.title}} <button class="btn btn-danger" v-if="!ticket.closed" @click="closeTicket">Close Ticket</button></h1>
                   <br>
                   <h4><i>Opened By: {{ticket.user}} || On Behalf Of: {{ticket.creator}}</i></h4>
                   <hr>
@@ -27,17 +27,17 @@
                      </div>
                      <div class="col-6 righty">
                         <textarea name="newComment.content" v-model="newComment.content" class="mt-2" rows=""
-                           cols="30" wrap="soft" maxlength="" style="overflow:show; resize:true;"
+                           cols="20" wrap="soft" maxlength="" style="overflow:show; resize:true;"
                            placeholder="Message.."></textarea>
-                        <input type="submit" value="Post Note">
+                        <input type="submit" class="btn btn-info" value="Post Note">
                      </div>
                   </form>
                </div>
                <div class="col-2 activeticket">
-                  <button @click="seen = !seen">Add Note</button>
+                  <button v-if="!ticket.closed" class="btn btn-info" @click="seen = !seen">Add Note</button>
                </div>
             </div>
-            <notes></notes>
+            <notes :ticketClosed="ticket.closed"></notes>
          </div>
       </div>
    </div>
@@ -49,13 +49,13 @@
 
    export default {
       name: "ticketDetails",
-      props: ['id'],
+      props: [],
       data() {
          return {
             seen: false,
             newComment: {
-               bug: this.id,
                creator: '',
+               bug: this.$route.params.id, 
                content: ''
             },
          }
@@ -72,7 +72,7 @@
 
       computed: {
          ticket() {
-            return this.$store.state.tickets.find(t => t._id == this.id) || {}
+            return this.$store.state.tickets.find(t => t._id == this.$route.params.id) || {}
          },
          tstatus() {
             if (this.ticket.closed) {
@@ -84,6 +84,9 @@
       methods: {
          CreateComment() {
             this.$store.dispatch('createComment', this.newComment)
+         },
+         closeTicket(){
+            this.$store.dispatch('closeTicket', this.ticket._id)
          }
       },
       components: {
@@ -91,7 +94,7 @@
       }
    }
 </script>
-<style>
+<style scoped>
    .activeticket {
       background-color: rgba(240, 240, 240, 0.137);
       color: #fd7e14;

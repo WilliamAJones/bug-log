@@ -1,6 +1,6 @@
 <template>
     <div class="myTickets row">
-        <div v-for="ticket in tickets" class="col-10 offset-1 plain-card">
+        <div v-for="ticket in showingTickets" class="col-10 offset-1 plain-card" :class="{'tClosed':ticket.closed,'tOpen':!ticket.closed }">
             <router-link class="linkz" :to="{name: 'ticketDetails', params: {id:ticket._id}}">
                 <div class="row">
                     <div class="col-4 left-side">
@@ -34,7 +34,7 @@
 <script>
     export default {
         name: "myTickets",
-        props: [],
+        props: ['showingOpen'],
         data() {
             return {}
         },
@@ -44,13 +44,19 @@
             },
             activeTicket() {
                 return this.$store.state.activeTicket
+            },
+            showingTickets(){
+                if(this.showingOpen == true ){
+                    return this.$store.state.tickets.filter(t => !t.closed)
+                }
+                return this.tickets
             }
         },
         methods: {},
         components: {}
     }
 </script>
-<style>
+<style scoped>
     .plain-card {
         background-color: rgba(240, 240, 240, 0.137);
         color: #fd7e14;
@@ -71,5 +77,8 @@
     }
     .linkz{
         color: #fd7e14;
+    }
+    .tOpen{
+        background-color:rgba(0, 128, 0, 0.274);
     }
 </style>
